@@ -32,66 +32,43 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
+
             <ListView.View>
                 <GridView>
-                    <GridViewColumn Header="Thumbnail" Width="100">
+                    <GridViewColumn Header="Video Queue" Width="700">
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ThumbnailUrl}" Height="70"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Video Title" Width="350">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <Label Content="{Binding Title}" />
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Download" Width="100">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <CheckBox IsChecked="{Binding IsSelectedForDownload}" HorizontalAlignment="Center"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Progress" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ProgressBar Value="{Binding ProgressBar, Mode=OneWay}" Height="20" VerticalAlignment="Center" Minimum="0" Maximum="1"/>
+                                <ContentControl Content="{Binding}">
+                                    <ContentControl.Resources>
+                                        <DataTemplate DataType="{x:Type ViewModels:VideoItem}">
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding ThumbnailUrl}" Height="70" VerticalAlignment="Center" Margin="0,10,20,10"/>
+                                                <Label Content="{Binding Title}" Width="250" VerticalAlignment="Center"/>
+                                                <CheckBox IsChecked="{Binding IsSelectedForDownload}" VerticalAlignment="Center" Width="100"/>
+                                                <ProgressBar Value="{Binding ProgressBar, Mode=OneWay}" Height="20" VerticalAlignment="Center" Minimum="0" Maximum="1" Width="120"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+
+                                        <DataTemplate DataType="{x:Type ViewModels:PlaylistItem}">
+                                            <TreeView HorizontalAlignment="Stretch" BorderThickness="0" HorizontalContentAlignment="Stretch">
+                                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                                                    <Image Source="{Binding ThumbnailUrl}" Height="70" VerticalAlignment="Center" Margin="0,10,20,10"/>
+                                                    <Label Content="{Binding Title}" Width="250" VerticalAlignment="Center"/>
+                                                    <CheckBox IsChecked="{Binding IsSelectedForDownload}" VerticalAlignment="Center" Width="100"/>
+                                                    <ProgressBar Value="{Binding ProgressBar, Mode=OneWay}" Height="20" VerticalAlignment="Center" Minimum="0" Maximum="1" Width="120"/>
+                                                </StackPanel>
+                                                <TreeViewItem>
+                                                    <ItemsControl ItemsSource="{Binding VideoList}"/>
+                                                </TreeViewItem>
+                                            </TreeView>
+                                        </DataTemplate>
+                                    </ContentControl.Resources>
+                                </ContentControl>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
                 </GridView>
             </ListView.View>
-
-            <ListView.Resources>
-                <!-- DataTemplate for VideoItem -->
-                <DataTemplate x:Key="VideoItemTemplate" DataType="{x:Type ViewModels:VideoItem}">
-                    <StackPanel Orientation="Horizontal">
-                        <Image Source="{Binding ThumbnailUrl}" Height="70"/>
-                        <Label Content="{Binding Title}" />
-                        <CheckBox IsChecked="{Binding IsSelectedForDownload}" HorizontalAlignment="Center"/>
-                        <ProgressBar Value="{Binding ProgressBar, Mode=OneWay}" Height="20" VerticalAlignment="Center" Minimum="0" Maximum="1"/>
-                    </StackPanel>
-                </DataTemplate>
-
-                <!-- DataTemplate for PlaylistItem -->
-                <DataTemplate x:Key="PlaylistItemTemplate" DataType="{x:Type ViewModels:PlaylistItem}">
-                    <Expander Header="{Binding Title}">
-                        <ItemsControl ItemsSource="{Binding VideoList}" ItemTemplate="{StaticResource VideoItemTemplate}"/>
-                    </Expander>
-                </DataTemplate>
-
-                <!-- Custom DataTemplateSelector -->
-                <local:ListDataTemplateSelector x:Key="ListDataTemplateSelector" VideoItemTemplate="{StaticResource VideoItemTemplate}" PlaylistItemTemplate="{StaticResource PlaylistItemTemplate}" />
-            </ListView.Resources>
-
-            <!-- Set the DataTemplateSelector -->
-            <ListView.ItemTemplateSelector>
-                <local:ListDataTemplateSelector VideoItemTemplate="{StaticResource VideoItemTemplate}" PlaylistItemTemplate="{StaticResource PlaylistItemTemplate}" />
-            </ListView.ItemTemplateSelector>
-
         </ListView>
 
         <Button Grid.Row="3" Margin="0,10,0,0" Content="Download" HorizontalAlignment="Center" Width="100" Height="30" Click="DownloadButton_Click"/>

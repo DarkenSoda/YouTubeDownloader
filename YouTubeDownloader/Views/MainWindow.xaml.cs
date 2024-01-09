@@ -36,4 +36,16 @@ public partial class MainWindow : Window {
 
 		downloader.StartAllDownload(itemsToDownload);
 	}
+
+	private void CheckBox_Checked(object sender, RoutedEventArgs e) {
+
+	}
+
+	private void CheckBox_Unchecked(object sender, RoutedEventArgs e) {
+
+	}
+
+	private void Expander_Expanded(object sender, RoutedEventArgs e) {
+
+	}
 }
